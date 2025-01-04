@@ -41,6 +41,7 @@ pub const RunIterator = struct {
     selection: ?terminal.Selection = null,
     cursor_x: ?usize = null,
     i: usize = 0,
+    break_at_cursor: bool = true,
 
     pub fn next(self: *RunIterator, alloc: Allocator) !?TextRun {
         const cells = self.row.cells(.all);
@@ -187,20 +188,22 @@ pub const RunIterator = struct {
             // emoji.
             if (!cell.hasGrapheme()) {
                 if (self.cursor_x) |cursor_x| {
-                    // Exactly: self.i is the cursor and we iterated once. This
-                    // means that we started exactly at the cursor and did at
-                    // exactly one iteration. Why exactly one? Because we may
-                    // start at our cursor but do many if our cursor is exactly
-                    // on an emoji.
-                    if (self.i == cursor_x and j == self.i + 1) break;
+                    if (self.break_at_cursor) {
+                        // Exactly: self.i is the cursor and we iterated once. This
+                        // means that we started exactly at the cursor and did at
+                        // exactly one iteration. Why exactly one? Because we may
+                        // start at our cursor but do many if our cursor is exactly
+                        // on an emoji.
+                        if (self.i == cursor_x and j == self.i + 1) break;
 
-                    // Before: up to and not including the cursor. This means
-                    // that we started before the cursor (self.i < cursor_x)
-                    // and j is now at the cursor meaning we haven't yet processed
-                    // the cursor.
-                    if (self.i < cursor_x and j == cursor_x) {
-                        assert(j > 0);
-                        break;
+                        // Before: up to and not including the cursor. This means
+                        // that we started before the cursor (self.i < cursor_x)
+                        // and j is now at the cursor meaning we haven't yet processed
+                        // the cursor.
+                        if (self.i < cursor_x and j == cursor_x) {
+                            assert(j > 0);
+                            break;
+                        }
                     }
 
                     // After: after the cursor. We don't need to do anything

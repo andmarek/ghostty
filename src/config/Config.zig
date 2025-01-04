@@ -238,6 +238,9 @@ const c = @cImport({
 /// currently on macOS.
 @"font-thicken": bool = false,
 
+// Add font shaping break which I don't reall know what it is right now
+@"font-shaping-break": FontShapingBreak = .{},
+
 /// All of the configurations behavior adjust various metrics determined by the
 /// font. The values can be integers (1, -1, etc.) or a percentage (20%, -15%,
 /// etc.). In each case, the values represent the amount to change the original
@@ -4627,6 +4630,43 @@ pub const RepeatablePath = struct {
     }
 };
 
+pub const FontShapingBreak = packed struct {
+    cursor: bool = true,
+
+    pub fn parseCLI(self: *FontShapingBreak, input_: ?[]const u8) !void {
+        const input = input_ orelse return error.ValueRequired;
+        const opt = std.mem.trim(u8, input, " \t");
+        if (std.mem.eql(u8, opt, "cursor")) {
+            self.cursor = true;
+        } else if (std.mem.eql(u8, opt, "no-cursor")) {
+            self.cursor = false;
+        } else {
+            return error.InvalidValue;
+        }
+    }
+
+    pub fn clone(self: FontShapingBreak, _: Allocator) error{}!FontShapingBreak {
+        return self;
+    }
+
+    pub fn equal(self: FontShapingBreak, other: FontShapingBreak) bool {
+        return self.cursor == other.cursor;
+    }
+
+    pub fn formatEntry(self: FontShapingBreak, formatter: anytype) !void {
+        if (self.cursor) {
+            try formatter.formatEntry(void, {});
+            return;
+        }
+
+        try formatter.formatEntry([]const u8, "no-cursor");
+    }
+    // TODO: add tests
+};
+
+///
+///
+///
 /// FontVariation is a repeatable configuration value that sets a single
 /// font variation value. Font variations are configurations for what
 /// are often called "variable fonts." The font files usually end in

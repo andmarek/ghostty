@@ -293,15 +293,9 @@ pub const Shaper = struct {
         row: terminal.Pin,
         selection: ?terminal.Selection,
         cursor_x: ?usize,
+        break_at_cursor: bool,
     ) font.shape.RunIterator {
-        return .{
-            .hooks = .{ .shaper = self },
-            .grid = grid,
-            .screen = screen,
-            .row = row,
-            .selection = selection,
-            .cursor_x = cursor_x,
-        };
+        return .{ .hooks = .{ .shaper = self }, .grid = grid, .screen = screen, .row = row, .selection = selection, .cursor_x = cursor_x, .break_at_cursor = break_at_cursor };
     }
 
     /// Note that this will accumulate garbage in the release pool. The
