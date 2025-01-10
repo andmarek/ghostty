@@ -19,6 +19,7 @@ pub const CopyOnSelect = Config.CopyOnSelect;
 pub const CustomShaderAnimation = Config.CustomShaderAnimation;
 pub const FontSyntheticStyle = Config.FontSyntheticStyle;
 pub const FontStyle = Config.FontStyle;
+pub const FontShapingBreak: type = Config.FontShapingBreak;
 pub const FreetypeLoadFlags = Config.FreetypeLoadFlags;
 pub const Keybinds = Config.Keybinds;
 pub const MouseShiftCapture = Config.MouseShiftCapture;

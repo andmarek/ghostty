@@ -238,7 +238,7 @@ const c = @cImport({
 /// currently on macOS.
 @"font-thicken": bool = false,
 
-// Add font shaping break which I don't reall know what it is right now
+// Break font shaping (text runs) under the cursor. If this is false, then we will not consider the cursor boundary a breaking point for a text run.
 @"font-shaping-break": FontShapingBreak = .{},
 
 /// All of the configurations behavior adjust various metrics determined by the
@@ -4669,7 +4669,6 @@ pub const FontShapingBreak = packed struct {
         var arena = ArenaAllocator.init(testing.allocator);
         defer arena.deinit();
         const alloc = arena.allocator();
-
         var p: Self = .{ .cursor = true };
 
         // Test default value
@@ -4707,9 +4706,9 @@ pub const FontShapingBreak = packed struct {
         var buf = std.ArrayList(u8).init(testing.allocator);
         defer buf.deinit();
 
-        const p = FontShapingBreak{ .cursor = true };
-        try p.formatEntry(formatterpkg.entryFormatter("font-shaping-break", buf.writer()));
-        try testing.expectEqualSlices(u8, "font-shaping-break = cursor\n", buf.items);
+        var p = FontShapingBreak{ .cursor = true };
+        try p.formatEntry(formatterpkg.entryFormatter("a", buf.writer()));
+        try testing.expectEqualSlices(u8, "a = cursor\n", buf.items);
     }
 
     test "formatConfig no-cursor" {
@@ -4717,9 +4716,9 @@ pub const FontShapingBreak = packed struct {
         var buf = std.ArrayList(u8).init(testing.allocator);
         defer buf.deinit();
 
-        const p = FontShapingBreak{ .cursor = false };
-        try p.formatEntry(formatterpkg.entryFormatter("font-shaping-break", buf.writer()));
-        try testing.expectEqualSlices(u8, "font-shaping-break = no-cursor\n", buf.items);
+        var p = FontShapingBreak{ .cursor = false };
+        try p.formatEntry(formatterpkg.entryFormatter("a", buf.writer()));
+        try testing.expectEqualSlices(u8, "a = no-cursor\n", buf.items);
     }
 };
 

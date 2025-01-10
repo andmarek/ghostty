@@ -362,6 +362,7 @@ pub const DerivedConfig = struct {
     font_thicken: bool,
     font_features: std.ArrayListUnmanaged([:0]const u8),
     font_styles: font.CodepointResolver.StyleStatus,
+    font_shaping_break: configpkg.FontShapingBreak,
     cursor_color: ?terminal.color.RGB,
     cursor_invert: bool,
     cursor_opacity: f64,
@@ -433,6 +434,7 @@ pub const DerivedConfig = struct {
             .bold_is_bright = config.@"bold-is-bright",
             .min_contrast = @floatCast(config.@"minimum-contrast"),
             .padding_color = config.@"window-padding-color",
+            .font_shaping_break = config.@"font-shaping-break",
 
             .selection_background = if (config.@"selection-background") |bg|
                 bg.toTerminalRGB()
@@ -2289,6 +2291,7 @@ fn rebuildCells(
                 );
             },
         }
+        const font_shaping_break = self.config.font_shaping_break;
 
         // Iterator of runs for shaping.
         var run_iter = self.font_shaper.runIterator(
@@ -2297,6 +2300,8 @@ fn rebuildCells(
             row,
             row_selection,
             if (shape_cursor) screen.cursor.x else null,
+            font_shaping_break.cursor,
+            // add false or something here
         );
         var shaper_run: ?font.shape.TextRun = try run_iter.next(self.alloc);
         var shaper_cells: ?[]const font.shape.Cell = null;

@@ -65,6 +65,7 @@ pub const Shaper = struct {
         row: terminal.Screen.Row,
         selection: ?terminal.Selection,
         cursor_x: ?usize,
+        break_at_cursor: bool,
     ) font.shape.RunIterator {
         return .{
             .hooks = .{ .shaper = self },
@@ -72,6 +73,7 @@ pub const Shaper = struct {
             .row = row,
             .selection = selection,
             .cursor_x = cursor_x,
+            .break_at_cursor = break_at_cursor,
         };
     }
 
@@ -295,6 +297,7 @@ pub const Wasm = struct {
         while (rowIter.next()) |row| {
             defer y += 1;
 
+            // TODO add break at cursor or options or something
             var iter = self.runIterator(group, row, null, null);
             while (try iter.next(alloc)) |run| {
                 const cells = try self.shape(run);

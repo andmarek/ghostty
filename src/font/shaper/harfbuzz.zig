@@ -94,6 +94,7 @@ pub const Shaper = struct {
         row: terminal.Pin,
         selection: ?terminal.Selection,
         cursor_x: ?usize,
+        break_at_cursor: bool,
     ) font.shape.RunIterator {
         return .{
             .hooks = .{ .shaper = self },
@@ -102,6 +103,7 @@ pub const Shaper = struct {
             .row = row,
             .selection = selection,
             .cursor_x = cursor_x,
+            .break_at_cursor = break_at_cursor,
         };
     }
 
@@ -231,6 +233,7 @@ test "run iterator" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |_| count += 1;
@@ -250,6 +253,7 @@ test "run iterator" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |_| count += 1;
@@ -270,6 +274,7 @@ test "run iterator" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |_| {
@@ -322,6 +327,7 @@ test "run iterator: empty cells with background set" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         {
             const run = (try it.next(alloc)).?;

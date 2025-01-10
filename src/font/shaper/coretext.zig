@@ -594,6 +594,7 @@ test "run iterator" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |_| count += 1;
@@ -613,6 +614,7 @@ test "run iterator" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |_| count += 1;
@@ -633,6 +635,7 @@ test "run iterator" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |_| count += 1;
@@ -654,6 +657,7 @@ test "run iterator" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |_| count += 1;
@@ -701,6 +705,7 @@ test "run iterator: empty cells with background set" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         {
             const run = (try it.next(alloc)).?;
@@ -737,6 +742,7 @@ test "shape" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     var count: usize = 0;
     while (try it.next(alloc)) |run| {
@@ -772,6 +778,7 @@ test "shape nerd fonts" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     var count: usize = 0;
     while (try it.next(alloc)) |run| {
@@ -800,6 +807,7 @@ test "shape inconsolata ligs" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -825,6 +833,7 @@ test "shape inconsolata ligs" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -858,6 +867,7 @@ test "shape monaspace ligs" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -892,6 +902,7 @@ test "shape left-replaced lig in last run" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -926,6 +937,7 @@ test "shape left-replaced lig in early run" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
 
         const run = (try it.next(alloc)).?;
@@ -957,6 +969,7 @@ test "shape U+3C9 with JB Mono" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
 
         var run_count: usize = 0;
@@ -990,6 +1003,7 @@ test "shape emoji width" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1030,6 +1044,7 @@ test "shape emoji width long" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     var count: usize = 0;
     while (try it.next(alloc)) |run| {
@@ -1066,6 +1081,7 @@ test "shape variation selector VS15" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     var count: usize = 0;
     while (try it.next(alloc)) |run| {
@@ -1101,6 +1117,7 @@ test "shape variation selector VS16" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     var count: usize = 0;
     while (try it.next(alloc)) |run| {
@@ -1133,6 +1150,7 @@ test "shape with empty cells in between" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     var count: usize = 0;
     while (try it.next(alloc)) |run| {
@@ -1171,6 +1189,7 @@ test "shape Chinese characters" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     var count: usize = 0;
     while (try it.next(alloc)) |run| {
@@ -1211,6 +1230,7 @@ test "shape box glyphs" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     var count: usize = 0;
     while (try it.next(alloc)) |run| {
@@ -1251,6 +1271,7 @@ test "shape selection boundary" {
                 false,
             ),
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1274,6 +1295,7 @@ test "shape selection boundary" {
                 false,
             ),
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1297,6 +1319,7 @@ test "shape selection boundary" {
                 false,
             ),
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1320,6 +1343,7 @@ test "shape selection boundary" {
                 false,
             ),
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1343,6 +1367,7 @@ test "shape selection boundary" {
                 false,
             ),
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1375,6 +1400,7 @@ test "shape cursor boundary" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1394,6 +1420,7 @@ test "shape cursor boundary" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             0,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1413,6 +1440,7 @@ test "shape cursor boundary" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             1,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1432,6 +1460,7 @@ test "shape cursor boundary" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             9,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1464,6 +1493,7 @@ test "shape cursor boundary and colored emoji" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1483,6 +1513,7 @@ test "shape cursor boundary and colored emoji" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             0,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1500,6 +1531,7 @@ test "shape cursor boundary and colored emoji" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             1,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1530,6 +1562,7 @@ test "shape cell attribute change" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1554,6 +1587,7 @@ test "shape cell attribute change" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1579,6 +1613,7 @@ test "shape cell attribute change" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1604,6 +1639,7 @@ test "shape cell attribute change" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1628,6 +1664,7 @@ test "shape cell attribute change" {
             screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
             null,
             null,
+            false,
         );
         var count: usize = 0;
         while (try it.next(alloc)) |run| {
@@ -1668,6 +1705,7 @@ test "shape high plane sprite font codepoint" {
         screen.pages.pin(.{ .screen = .{ .y = 0 } }).?,
         null,
         null,
+        false,
     );
     // We should get one run
     const run = (try it.next(alloc)).?;
