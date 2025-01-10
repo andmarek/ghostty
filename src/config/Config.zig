@@ -4631,15 +4631,18 @@ pub const RepeatablePath = struct {
 };
 
 pub const FontShapingBreak = packed struct {
+    const Self = @This();
+
+    // If this is false then we will not consider the cursor boundary a breaking point for a text run.
     cursor: bool = true,
 
-    pub fn parseCLI(self: *FontShapingBreak, input_: ?[]const u8) !void {
-        const input = input_ orelse return error.ValueRequired;
-        const opt = std.mem.trim(u8, input, " \t");
-        if (std.mem.eql(u8, opt, "cursor")) {
-            self.cursor = true;
-        } else if (std.mem.eql(u8, opt, "no-cursor")) {
-            self.cursor = false;
+    pub fn parseCLI(self: *Self, _: Allocator, input_: ?[]const u8) !void {
+        const value = input_ orelse return error.ValueRequired;
+
+        if (std.mem.eql(u8, value, "cursor")) {
+            self.* = .{ .cursor = true };
+        } else if (std.mem.eql(u8, value, "no-cursor")) {
+            self.* = .{ .cursor = false };
         } else {
             return error.InvalidValue;
         }
@@ -4656,12 +4659,68 @@ pub const FontShapingBreak = packed struct {
     pub fn formatEntry(self: FontShapingBreak, formatter: anytype) !void {
         if (self.cursor) {
             try formatter.formatEntry(void, {});
-            return;
+        } else {
+            try formatter.formatEntry([]const u8, "no-cursor");
         }
-
-        try formatter.formatEntry([]const u8, "no-cursor");
     }
-    // TODO: add tests
+
+    test "parseCLI" {
+        const testing = std.testing;
+        var arena = ArenaAllocator.init(testing.allocator);
+        defer arena.deinit();
+        const alloc = arena.allocator();
+
+        var p: Self = .{ .cursor = true };
+
+        // Test default value
+        try testing.expect(p.cursor == true);
+
+        // Test setting cursor explicitly
+        try p.parseCLI(alloc, "cursor");
+        try testing.expect(p.cursor == true);
+
+        // Test setting no-cursor
+        try p.parseCLI(alloc, "no-cursor");
+        try testing.expect(p.cursor == false);
+
+        // Test invalid value
+        try testing.expectError(error.InvalidValue, p.parseCLI(alloc, "invalid"));
+
+        // Test missing value
+        try testing.expectError(error.ValueRequired, p.parseCLI(alloc, null));
+    }
+
+    test "clone" {
+        const testing = std.testing;
+        var arena = ArenaAllocator.init(testing.allocator);
+        defer arena.deinit();
+        const alloc = arena.allocator();
+
+        const original = FontShapingBreak{ .cursor = false };
+        const cloned = try original.clone(alloc);
+
+        try testing.expect(original.equal(cloned));
+    }
+
+    test "formatConfig cursor" {
+        const testing = std.testing;
+        var buf = std.ArrayList(u8).init(testing.allocator);
+        defer buf.deinit();
+
+        const p = FontShapingBreak{ .cursor = true };
+        try p.formatEntry(formatterpkg.entryFormatter("font-shaping-break", buf.writer()));
+        try testing.expectEqualSlices(u8, "font-shaping-break = cursor\n", buf.items);
+    }
+
+    test "formatConfig no-cursor" {
+        const testing = std.testing;
+        var buf = std.ArrayList(u8).init(testing.allocator);
+        defer buf.deinit();
+
+        const p = FontShapingBreak{ .cursor = false };
+        try p.formatEntry(formatterpkg.entryFormatter("font-shaping-break", buf.writer()));
+        try testing.expectEqualSlices(u8, "font-shaping-break = no-cursor\n", buf.items);
+    }
 };
 
 ///
